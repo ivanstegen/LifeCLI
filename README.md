@@ -16,24 +16,66 @@ A private, local-first personal dashboard — **Finance, Habits, Watchlist (movi
 
 Vite · React · TypeScript · Tailwind CSS v4 · Dexie (IndexedDB) · React Router · Recharts · date-fns · framer-motion · three.js / @react-three/fiber / drei · self-hosted fonts (@fontsource) · **Tauri v2** (desktop packaging).
 
-## Run in the browser (dev)
+## Getting started — run it on your device
+
+There is no hosted version and no sign-up: you run LifeCLI yourself and all data stays on your machine. There are two ways to run it — the browser (quickest) or as a native desktop app.
+
+### Prerequisites
+
+- **[Node.js](https://nodejs.org/) 20+** (LTS recommended) — this includes `npm`. Needed for both options.
+- **For the desktop app only**, also install the [Tauri v2 prerequisites](https://tauri.app/start/prerequisites/):
+  - **Rust** (stable) via [rustup](https://rustup.rs/).
+  - A **C/C++ build toolchain** — on **Windows** the *Microsoft C++ Build Tools* (or Visual Studio with the "Desktop development with C++" workload); on **macOS** the *Xcode Command Line Tools* (`xcode-select --install`); on **Linux** `build-essential` and the WebKitGTK dev packages.
+  - A **system webview** — **WebView2** on Windows (preinstalled on Windows 10/11), **WebKitGTK** on Linux, built-in on macOS.
+
+### 1. Get the code
 
 ```bash
+git clone https://github.com/ivanstegen/LifeCLI.git
+cd LifeCLI
 npm install
-npm run dev          # http://localhost:5173
-npm run build        # type-check + production build to dist/
 ```
 
-## Run as a desktop app (Tauri)
+(Or download the ZIP from the green **Code** button on GitHub, extract it, open a terminal in the folder, and run `npm install`.)
 
-Requires the [Tauri v2 prerequisites](https://tauri.app/start/prerequisites/): Rust (stable), a C/C++ toolchain (MSVC on Windows), and the platform webview (WebView2 on Windows).
+### Option A — run in your browser (easiest, no Rust needed)
 
 ```bash
-npm run tauri:dev    # launches the native window with hot reload
-npm run tauri:build  # produces installers in src-tauri/target/release/bundle/
+npm run dev
 ```
 
-On Windows this yields an NSIS `*-setup.exe` and a `*.msi`.
+Open **http://localhost:5173** in your browser. That's it — add finances, habits, and watchlist items; everything is saved locally in the browser's IndexedDB and persists across restarts.
+
+To make an optimized production build instead:
+
+```bash
+npm run build     # type-checks and outputs to dist/
+npm run preview   # serve the built app locally to check it
+```
+
+### Option B — install it as a native desktop app (Tauri)
+
+This needs the desktop prerequisites above.
+
+```bash
+npm run tauri:dev     # opens the app in a native window with hot reload
+```
+
+To build a real installer you can double-click:
+
+```bash
+npm run tauri:build
+```
+
+The installers are written to `src-tauri/target/release/bundle/`:
+
+- **Windows:** `nsis/LifeCLI_<version>_x64-setup.exe` (recommended) and `msi/LifeCLI_<version>_x64_en-US.msi`
+- **macOS:** a `.dmg` and `.app` under `bundle/dmg` and `bundle/macos`
+- **Linux:** `.AppImage` and `.deb` under `bundle/appimage` and `bundle/deb`
+
+Double-click the installer to install LifeCLI with its icon; afterwards it launches from your Start menu / applications like any other app.
+
+> **Windows note:** because the app isn't code-signed, SmartScreen may show *"Windows protected your PC."* Click **More info → Run anyway** to proceed. This is expected for a self-built, unsigned app.
 
 ## Data & privacy
 
